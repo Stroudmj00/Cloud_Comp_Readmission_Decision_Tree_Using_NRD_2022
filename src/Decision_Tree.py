@@ -23,7 +23,6 @@
 # In[2]:
 
 
-get_ipython().system('pip install --only-binary=pyarrow pyarrow')
 import pyarrow
 import numpy as np
 import pandas as pd
