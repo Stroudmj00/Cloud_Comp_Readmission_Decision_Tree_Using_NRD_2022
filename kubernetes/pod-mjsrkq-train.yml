@@ -17,11 +17,11 @@ spec:
       mountPath: /data
     resources:
       limits:
-        memory: 36Gi
-        cpu: "2"
+        memory: 32Gi
+        cpu: "8"
       requests:
-        memory: 36Gi
-        cpu: "2"
+        memory: 32Gi
+        cpu: "8"
   volumes:
   - name: mjsrkq-pv
     persistentVolumeClaim:
