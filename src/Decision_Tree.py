@@ -46,7 +46,7 @@ from sklearn.metrics import roc_auc_score, PrecisionRecallDisplay, average_preci
 
 
 # Load Da Data
-df = pd.read_parquet('/dsa/groups/casestudyolf25/team03/nrd_preprocessed_updated.parquet')
+df = pd.read_parquet('../data/nrd_preprocessed_updated.parquet')
 #df.dtypes
 
 
