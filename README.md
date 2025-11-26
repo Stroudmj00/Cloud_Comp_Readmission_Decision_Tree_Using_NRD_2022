@@ -38,25 +38,44 @@ Utilizing the NLP container this code does not run do to a OOM error. Utilizing 
 
 ## Directory Structure:
 data/
+
 |_ README.md 
+
 |_ Dockerfile 
+
 |_ requirements.txt 
+
 |_ kubernetes/
+
 | |_ pvc.yaml 
+
 | |_ pod.yaml 
+
 |_ src/
+
 | |_ preprocessing.py 
-| |_ model.py # Model 
+
+| |_ model.py
+
 | |_ evaluate.py 
+
 | |_ main.py 
+
 |_ data/
+
 | |_ README.md 
+
 | |_ nrd_preprocessed_updated.parquet
+
 |_ results/
+
 | |_ metrics.json 
+
 | |_ feature importance.png
 |_ docs/
+
 |_ SETUP.md
+
 |_ CLOUD_SETUP.md
 
 

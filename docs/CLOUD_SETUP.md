@@ -18,3 +18,6 @@ I requested 50 GB
 We are using one pod with 8 cores.
 I am using 32 gb of ram because this is the max I could use without submitting a job.
 We are not using a gpu. 
+
+## Custom Docker Image
+We utilize a custom docker image located here: stroudmj00/readmission-project:v1
