@@ -1,1 +1,13 @@
-*.parquet
+# Ignore Data (Confidential)
+data/
+
+# Ignore Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Ignore Python Cache
+__pycache__/
+*.pyc
+
+# Ignore System Files
+.DS_Store*.parquet
