@@ -10,7 +10,7 @@ spec:
       claimName: mjsrkq-pv
   containers:
   - name: train-container
-    image: gitlab-registry.nrp-nautilus.io/skhan/dl_pytorch:4bd8b3be
+    image: stroudmj00/readmission-project:v1
     command: ["/bin/sh", "-c", "echo 'Im a new pod' && sleep infinity"]
     workingDir: /data
     resources:
