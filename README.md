@@ -3,7 +3,9 @@ Author: Michael Stroud
 
 ## Description
 Hospital readmissions present a significant challenge to the global healthcare system, impacting both patient welfare and operational efficiency. In the United States, incentive structures such as the Hospital Readmissions Reduction Program (HRRP) financially penalize facilities with excessive 30-day readmission rates. A critical need is seen for predictive analytics to identify high-risk patients. This project leverages the Nautilus cloud computing platform to deploy a scalable machine learning pipeline capable of predicting 30-day readmissions in a one million encounter sample of patients aged 65 or greater using the 2022 Nationwide Readmissions Database (NRD). The pipeline implements a decision tree and hyperparameter tuning which maximize the Receiver Operating Characteristic Area Under the Curve (ROC-AUC).
+
 Previous local attempts to analyze this dataset faced memory constraints due to many one-hot encoding variables and an impressive dataset size of 16.5 million encounters. Utilizing the cloud infrastructure allows these models to reach their full potential. 
+
 The final model achieved a Test ROC-AUC of 0.598. Feature importance analysis revealed that risk of mortality (aprdrg_risk_mortality) and length of stay (los_group) were the most salient predictors of readmission. The current model establishes a low baseline, but more importantly proves that a successful use of cloud computing can overcome local resource bottlenecks. This paper paves the way for a random forest model to be used in my 2026 case study. 
 
 
