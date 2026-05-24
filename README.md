@@ -1,95 +1,108 @@
-# Cloud Computing: Predicting Readmission using NRD dataset and Decision Tree Algorithm
+# Cloud Readmission Prediction with NRD 2022
+
 Author: Michael Stroud
 
-## Description
-Hospital readmissions present a significant challenge to the global healthcare system, impacting both patient welfare and operational efficiency. In the United States, incentive structures such as the Hospital Readmissions Reduction Program (HRRP) financially penalize facilities with excessive 30-day readmission rates. A critical need is seen for predictive analytics to identify high-risk patients. This project leverages the Nautilus cloud computing platform to deploy a scalable machine learning pipeline capable of predicting 30-day readmissions in a one million encounter sample of patients aged 65 or greater using the 2022 Nationwide Readmissions Database (NRD). The pipeline implements a decision tree and hyperparameter tuning which maximize the Receiver Operating Characteristic Area Under the Curve (ROC-AUC).
+## Summary
 
-Previous local attempts to analyze this dataset faced memory constraints due to many one-hot encoding variables and an impressive dataset size of 16.5 million encounters. Utilizing the cloud infrastructure allows these models to reach their full potential. 
+This project uses the 2022 Nationwide Readmissions Database (NRD) to build a cloud-hosted baseline model for 30-day hospital readmission prediction. The main value is not a high-performing final model; it is the reproducible cloud pipeline, memory-constrained feature engineering, and honest evaluation of what a simple decision tree can and cannot explain.
 
-The final model achieved a Test ROC-AUC of 0.598. Feature importance analysis revealed that risk of mortality (aprdrg_risk_mortality) and length of stay (los_group) were the most salient predictors of readmission. The current model establishes a low baseline, but more importantly proves that a successful use of cloud computing can overcome local resource bottlenecks. This paper paves the way for a random forest model to be used in my 2026 case study. 
+The work was run on the Nautilus cloud computing platform with Kubernetes resources, Dockerized dependencies, and a Python ML pipeline split into preprocessing, modeling, evaluation, and reporting modules.
 
+## What This Demonstrates
+
+- Moving a healthcare ML workload from local memory limits to a cloud/Kubernetes environment.
+- Structuring a notebook-style model into reusable Python modules.
+- Handling a large NRD-derived sample with one-hot encoded features and saved intermediate artifacts.
+- Reporting a low baseline result without overstating model quality.
+- Preparing a path for stronger follow-on models such as random forests or gradient-boosted methods.
+
+## Data and Modeling Context
+
+Hospital readmissions are operationally and financially important because excessive 30-day readmissions can affect patient welfare, capacity planning, and reimbursement incentives.
+
+This project uses a one-million-encounter sample of patients aged 65 or older from NRD 2022. The pipeline trains and tunes a decision tree model to predict 30-day readmission risk and evaluates the model using ROC-AUC.
+
+## Result
+
+- **Model:** decision tree baseline with hyperparameter tuning
+- **Test ROC-AUC:** 0.598
+- **Most important predictors:** mortality risk grouping and length-of-stay grouping
+- **Interpretation:** useful as a cloud-computing and baseline-modeling proof point, not as a production readmission-risk model
 
 ## Running the Model
-(1) Create PVC
+
+Create the persistent volume claim:
+
+```bash
 kubectl apply -f kubernetes/pvc.yaml
+```
 
-(2) Create Pod
+Create the pod:
+
+```bash
 kubectl apply -f kubernetes/pod.yaml
+```
 
-(3) Ensure pods are running
+Watch pod status:
+
+```bash
 kubectl get pods -w
+```
 
+Upload data to persistent storage:
 
-(4) Upload your data to your persistant storage
-kubectl cp {your data} {your pod}:/data/repo/data/
+```bash
+kubectl cp <your-data> <your-pod>:/data/repo/data/
+```
 
-(5) Log into the pod
+Open a shell in the pod:
+
+```bash
 kubectl exec -it pod-mjsrkq-train -- /bin/bash
-
-(6) inside the pod change directory to where the data is
 cd /data/repo
-
-(7) install requirements.txt
 pip install -r requirements.txt
-
-(8) Run main.py 
 python3 src/main.py
+```
 
-(9) return results to your local machine. 
+Copy results back locally:
+
+```bash
 kubectl cp pod-mjsrkq-train:/data/repo/results/ ./results/
+```
 
-## Performance Comparison
-Utilizing the NLP container this code does not run do to a OOM error. Utilizing the Capstone container, this code takes ~4 minutes to run. Utilizing cloud computing the code took 2 minutes to run. Part of why it took so long is that this code needs to write the processed data and save it to a new file to communicate between steps.
+## Performance Notes
 
-## Directory Structure:
-data/
+A local NLP container hit an out-of-memory failure. A larger capstone container completed the run in roughly four minutes. The Nautilus cloud run completed in roughly two minutes, with runtime affected by writing processed data to disk between pipeline stages.
 
-|_ README.md 
+## Repository Structure
 
-|_ Dockerfile 
+```text
+kubernetes/
+  pvc.yaml
+  pod.yaml
+src/
+  preprocessing.py
+  model.py
+  evaluate.py
+  main.py
+results/
+  metrics.json
+  feature importance.png
+docs/
+  SETUP.md
+  CLOUD_SETUP.md
+Dockerfile
+requirements.txt
+README.md
+```
 
-|_ requirements.txt 
+## Generative AI Use
 
-|_ kubernetes/
+Generative AI helped port notebook code into modular Python files, improve PEP 8 compliance, use relative paths, and understand Docker configuration. The original notebook logic and project framing were written by Michael Stroud.
 
-| |_ pvc.yaml 
+## Limitations
 
-| |_ pod.yaml 
-
-|_ src/
-
-| |_ preprocessing.py 
-
-| |_ model.py
-
-| |_ evaluate.py 
-
-| |_ main.py 
-
-|_ data/
-
-| |_ README.md 
-
-| |_ nrd_preprocessed_updated.parquet
-
-|_ results/
-
-| |_ metrics.json 
-
-| |_ feature importance.png
-|_ docs/
-
-|_ SETUP.md
-
-|_ CLOUD_SETUP.md
-
-
-## Generative AI Disclaimer
-Generative AI was used in the project to port by jupiter notebook python code (which was written by myself) into python code which is split into the for files as following:
-    (1) preprocessing.py
-    (2) model.py
-    (3) evaluate.py
-    (4) main.py
-The AI's was instructed to (1) improve on my code, (2) become PEP8 compliant, and (3) use relative file paths. 
-
-Generative AI was also used to understand and configure Docker.
+- ROC-AUC is low and should be treated as a baseline only.
+- NRD-derived data handling requires care around publication and reproducibility.
+- Decision trees are interpretable but limited for this task.
+- The next modeling step should compare stronger ensemble methods under the same cloud pipeline.
